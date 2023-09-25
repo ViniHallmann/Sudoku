@@ -1,0 +1,59 @@
+H1 { 
+    color:white;
+    margin:0px 0px 2px 0px;
+    font-size:24px;
+    padding:2px 1px 5px 1px;
+    text-align:center;    
+}
+
+body {
+    color: white;
+    font-family: Arial, sans-serif;
+    background-color: black;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.sudoku_container {
+    flex: 1;
+}
+
+.sudoku_status {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.sudoku_grid {
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+.sudoku_cel {
+    border: 1px solid #333;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.sudoku_grid tr:nth-child(3n) {
+    border-bottom: 4px solid #333;
+}
+
+.sudoku_grid tr td:nth-child(3n) {
+    border-right: 4px solid #333;
+}
+
+.sudoku_grid tr:first-child {
+    border-top: 4px solid #333;
+}
+.sudoku_grid td:first-child {
+    border-left: 4px solid #333;
+}
