@@ -2,15 +2,23 @@ document.addEventListener('DOMContentLoaded', function() {
     var cells = document.querySelectorAll('.sudoku_cel');
     cells.forEach(function(cell) {
         cell.addEventListener('click', function() {
-            var valor = prompt('Insira um valor:');
-            if (isNaN(valor)) {
-                alert('Insira um valor válido!');
+            this.contentEditable = true;
+            this.focus();
+        });
+    
+        cell.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evita a quebra de linha
+                var valor = this.textContent.trim();
+                if (isNaN(valor) || valor === '' || valor < 1 || valor > 9) {
+                    alert('Insira um valor válido de 1 a 9!');
+                    this.textContent = '';
+                } else {
+                    this.contentEditable = false;
+                }
+                updateSudokuStatus();
+                isSudokuComplete();
             }
-            else{
-                this.textContent = valor;
-            }
-            updateSudokuStatus();
-            isSudokuComplete();
         });
     });
 
