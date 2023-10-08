@@ -5,7 +5,7 @@ class DisplayMatrix:
         self.SIZE = SIZE   
         self.grid = grid
 
-    """def Display_Grid( self ):
+    def Display_Grid( self ):
         #os.system( "cls" )
         print( "     ", end="" )
         for i in range(  self.SIZE ) :
@@ -25,11 +25,11 @@ class DisplayMatrix:
             #print( f"{row} |", end="" )
             for column in range( self.SIZE  ):
                 if column == 2 or column == 5:
-                    print( f"{self.grid[row][column]:3d}|", end="" )
+                    print( f"{self.grid[row][column]}|", end="" )
                 else:
-                    print( f"{self.grid[row][column]:3d} ", end="" )
+                    print( f"{self.grid[row][column]} ", end="" )
             print( "\n", end="" )
-            #time.sleep(0.1)"""
+            #time.sleep(0.1)
 
     def Reveal_Numbers( self, qtd ):
         count = 81 - qtd

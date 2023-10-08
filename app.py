@@ -23,6 +23,7 @@ def checkSolution():
     for _ in range ( 0, 9 ):
         print(request.json['grid'][_])
     CM = CheckMatrix(9, request.json['grid'])
+    print(CM.Is_Valid_Solution())
     if CM.Is_Valid_Solution():
         print("Solução válida")
         return jsonify( { 'message': 'Valid Solution' } ), 200

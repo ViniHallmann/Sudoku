@@ -29,12 +29,13 @@ class CheckMatrix:
     def Check_Grid ( self, num, column, row, grid ):
         return self.Check_Column( num, column, grid ) and self.Check_Row( num, row, grid ) and self.Check_Square( num, column, row, grid )
 
-    def Grid_Full ( self ):
+    def Is_Grid_Full ( self ):
         for row in range ( 0, self.SIZE ):
             for column in range ( 0, self.SIZE ):
                 if self.grid[ row ][ column ] == 0:
                     return False
-                
+        return True
+                             
     def Is_Valid_Solution( self ):
         for row in range( self.SIZE ):
             for column in range( self.SIZE ):
