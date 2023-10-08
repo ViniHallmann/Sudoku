@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
         cell.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault(); 
-                var valor = this.textContent.trim();
-                if (isNaN(valor) || valor === '' || valor < 1 || valor > 9) {
+                var value = this.textContent.trim();
+                if (isNaN(value) || value === '' || value < 1 || value > 9) {
                     alert('Insira um valor válido de 1 a 9!');
                     this.textContent = '';
                 } else {
@@ -55,48 +55,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getGridData() {
-        var tabela = document.getElementById('sudoku_table');
-        var dadosDoGrid = [];
+        var sudokuTable = document.getElementById('sudoku_table');
+        var gridData = [];
     
-        for (var i = 0; i < tabela.rows.length; i++) {
-            var linha = tabela.rows[i];
-            var linhaDoGrid = [];
+        for (var i = 0; i < sudokuTable.rows.length; i++) {
+            var row = sudokuTable.rows[i];
+            var gridRow = [];
 
-            for (var j = 0; j < linha.cells.length; j++) {
-                var celula = linha.cells[j];
-                var valor = celula.textContent.trim(); 
-                linhaDoGrid.push(valor);
+            for (var j = 0; j < row.cells.length; j++) {
+                var cell = row.cells[j];
+                var value = cell.textContent.trim(); 
+                gridRow.push(value);
             }
     
-            dadosDoGrid.push(linhaDoGrid);
+            gridData.push(gridRow);
         }
     
-        return dadosDoGrid;
+        return gridData;
     }
 
     function verifySolution () {
-        var dados = getGridData();
-        
-        var dadosParaEnviar = {
-            grid: dados
-        };
         fetch('/check_solution', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(dadosParaEnviar)
+            body: JSON.stringify( {grid:getGridData( )} )
         })
         .then(function(response) {
             console.log(response);
-            return response.json(); // Analisa a resposta JSON do servidor
-        })
-        .then(function(data) {
-            // Manipule o resultado retornado pelo servidor (data)
-            console.log(data.resultado);
+            return response.json(); 
         })
         .catch(function(error) {
-            // Lide com erros, se houver algum
             console.error('Erro:', error);
         });
     }

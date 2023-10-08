@@ -35,11 +35,10 @@ class CheckMatrix:
                 if self.grid[ row ][ column ] == 0:
                     return False
                 
-    
-    def is_Valid_Solution( self ):
+    def Is_Valid_Solution( self ):
         for row in range( self.SIZE ):
             for column in range( self.SIZE ):
                 number = self.grid[row][column]
-                if not self.CM.Check_Grid( number, column, row, self.grid ):
+                if not self.Check_Grid( number, column, row, self.grid ):
                     return False
-        True
+        return True

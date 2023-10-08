@@ -16,13 +16,14 @@ def homepage():
     #display_answer = DisplayMatrix(SIZE, matrix.grid)
     display.Reveal_Numbers(80)
     grid_data = display.Get_Grid_Data()  
-
     return render_template( 'index.html', grid_data = grid_data )
 
 @app.route( '/check_solution', methods=['POST'] )
 def checkSolution():
+    for _ in range ( 0, 9 ):
+        print(request.json['grid'][_])
     CM = CheckMatrix(9, request.json['grid'])
-    if CM.is_Valid_Solution():
+    if CM.Is_Valid_Solution():
         print("Solução válida")
         return jsonify( { 'message': 'Valid Solution' } ), 200
     else:
