@@ -30,18 +30,26 @@ class CheckMatrix:
         return self.Check_Column( num, column, grid ) and self.Check_Row( num, row, grid ) and self.Check_Square( num, column, row, grid )
 
     def Is_Grid_Full ( self ):
-        for row in range ( 0, self.SIZE ):
-            for column in range ( 0, self.SIZE ):
+        for row in range (self.SIZE ):
+            for column in range (self.SIZE ):
                 if self.grid[ row ][ column ] == 0:
                     return False
         return True
-                             
-    def Is_Valid_Solution( self ):
-        for row in range( self.SIZE ):
-            for column in range( self.SIZE ):
-                #print( self.grid[row][column], end = " " )
-                number = self.grid[row][column]
-                if not self.Check_Grid( number, column, row, self.grid ):
+                                
+    def Is_Valid_Solution(self):
+        for row in range(0, self.SIZE, self.box_size):
+            for col in range(0, self.SIZE, self.box_size):
+                if not self.Check_Quadrant(row, col, self.grid):
                     return False
-            #print ( "" )
         return True
+
+    def Check_Quadrant(self, start_row, start_col, grid):
+        nums = set()
+        for row in range(start_row, start_row + self.box_size):
+            for col in range(start_col, start_col + self.box_size):
+                num = grid[row][col]
+                if num in nums or num < 1 or num > 9:
+                    return False
+                nums.add(num)
+        return True
+

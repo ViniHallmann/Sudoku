@@ -35,7 +35,7 @@ def checkSolution():
         return jsonify( { 'message': 'Valid Solution' } ), 200
     else:
         print("Solução inválida")
-        return jsonify( { 'message': 'Invalid Solution' } ), 300
+        return jsonify( { 'message': 'Invalid Solution' } ), 200
 
 if __name__ == "__main__":
     #homepage()

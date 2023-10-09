@@ -79,22 +79,29 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(gridData);
     }
 
-    function verifySolution () {
+    function verifySolution() {
         printGridData();
         fetch('/check_solution', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify( {grid:getGridData( )} )
+            body: JSON.stringify({ grid: getGridData() })
         })
         .then(function(response) {
-            console.log(response);
-            return response.json(); 
+            if (response.ok) {
+                return response.json();
+            }
         })
-        .catch(function(error) {
-            console.error('Erro:', error);
-        });
+        .then(function(data) {
+            console.log(data);
+            if (data.message === 'Valid Solution') {
+                alert('Solução válida!');
+            } else if (data.message === 'Invalid Solution') {
+                alert('Solução inválida.');
+            } 
+        })
     }
+    
     updateSudokuStatus();
 });
