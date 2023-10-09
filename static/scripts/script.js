@@ -2,20 +2,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var cells = document.querySelectorAll('.sudoku_cel');
     cells.forEach(function(cell) {
+        cell.addEventListener('input', function() { // Função para testar os caracteres e só permitir 1 por vez
+            var content = this.textContent.trim();
+            if (content.length > 1 || !/^[1-9]$/.test(content)) {
+                this.textContent = '';
+            }
+        });
+        
         cell.addEventListener('click', function() {
-            this.contentEditable = true;
-            this.focus();
+            cells.forEach(function(c) {
+                c.classList.remove('selected-cell');
+                c.classList.remove('primary-cell');
+            });
+            this.classList.add('primary-cell');
+            var cellIndex = Array.from(this.parentNode.children).indexOf(this);
+            var rowCells = Array.from(this.parentNode.children);
+
+            rowCells.forEach(function(rowCell) {
+                rowCell.classList.add('selected-cell');
+            });
+            cells.forEach(function(colCell) {
+                if (Array.from(colCell.parentNode.children).indexOf(colCell) === cellIndex) {
+                    colCell.classList.add('selected-cell');
+                }
+            });
         });
     
         cell.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault(); 
                 var value = this.textContent.trim();
-                if (isNaN(value) || value === '' || value < 1 || value > 9) {
-                    alert('Insira um valor válido de 1 a 9!');
+                if (isNaN(value) || value === '') {
+                    alert('Por favor, insira um valor!');
                     this.textContent = '';
                 } else {
-                    this.contentEditable = false;
+                    this.contentEditable = true;
                 }
                 updateSudokuStatus();
                 isSudokuComplete();
@@ -49,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         if (isComplete){
             verifySolution();
-            alert("Parabéns, você completou o Sudoku!");
         }
         return isComplete;
     }
@@ -96,7 +116,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(data) {
             console.log(data);
             if (data.message === 'Valid Solution') {
-                alert('Solução válida!');
+                // alert("");
+                alert('Parabens voce completou o sudoku!!');
             } else if (data.message === 'Invalid Solution') {
                 alert('Solução inválida.');
             } 
@@ -104,4 +125,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     updateSudokuStatus();
+    cells.setAttribute('contentEditable', 'true');
 });

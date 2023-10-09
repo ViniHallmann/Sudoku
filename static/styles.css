@@ -57,3 +57,13 @@ body {
 .sudoku_grid td:first-child {
     border-left: 4px solid #333;
 }
+
+.selected-cell {
+    background-color: #4e4d4d;
+}
+
+
+/*Primary-cell é a celula clicacada, uma cor mais clara que a coluna/linha da célula */
+.primary-cell{
+    background-color: rgb(153, 150, 150);
+}
