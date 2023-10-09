@@ -13,23 +13,29 @@ def homepage():
     matrix.Fill_Grid()
 
     display = DisplayMatrix(SIZE, matrix.grid)
-    #display_answer = DisplayMatrix(SIZE, matrix.grid)
+    display_answer = DisplayMatrix(SIZE, matrix.grid)
     display.Reveal_Numbers(80)
     grid_data = display.Get_Grid_Data()  
+    print("GRID COM NUMEROS ESCONDIDOS")
+    for i in range (9):
+        print(grid_data[i])
     return render_template( 'index.html', grid_data = grid_data )
 
 @app.route( '/check_solution', methods=['POST'] )
 def checkSolution():
-    for _ in range ( 0, 9 ):
-        print(request.json['grid'][_])
-    CM = CheckMatrix(9, request.json['grid'])
+    grid = request.json['grid']
+    print("GRID QUE O JSON RETORNOU")
+    for i in range (9):
+        print(grid[i])
+    CM = CheckMatrix(9, grid)
+    
     print(CM.Is_Valid_Solution())
     if CM.Is_Valid_Solution():
         print("Solução válida")
         return jsonify( { 'message': 'Valid Solution' } ), 200
     else:
         print("Solução inválida")
-        return jsonify( { 'message': 'Invalid Solution' } ), 200
+        return jsonify( { 'message': 'Invalid Solution' } ), 300
 
 if __name__ == "__main__":
     #homepage()

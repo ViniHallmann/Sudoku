@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             for (var j = 0; j < row.cells.length; j++) {
                 var cell = row.cells[j];
                 var value = cell.textContent.trim(); 
-                gridRow.push(value);
+                gridRow.push(parseInt(value));
             }
     
             gridData.push(gridRow);
@@ -74,7 +74,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return gridData;
     }
 
+    function printGridData() {
+        var gridData = getGridData();
+        console.log(gridData);
+    }
+
     function verifySolution () {
+        printGridData();
         fetch('/check_solution', {
             method: 'POST',
             headers: {

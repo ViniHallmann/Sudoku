@@ -39,7 +39,9 @@ class CheckMatrix:
     def Is_Valid_Solution( self ):
         for row in range( self.SIZE ):
             for column in range( self.SIZE ):
+                #print( self.grid[row][column], end = " " )
                 number = self.grid[row][column]
                 if not self.Check_Grid( number, column, row, self.grid ):
                     return False
+            #print ( "" )
         return True
