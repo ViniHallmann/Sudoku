@@ -17,11 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     this.contentEditable = false;
                 }
+                verifyNumber();
                 updateSudokuStatus();
                 isSudokuComplete();
             }
         });
     });
+
 
     function updateSudokuStatus() {
         var filledCells = 0;
@@ -74,13 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return gridData;
     }
 
-    function printGridData() {
-        var gridData = getGridData();
-        console.log(gridData);
-    }
-
     function verifySolution() {
-        printGridData();
+
         fetch('/check_solution', {
             method: 'POST',
             headers: {
@@ -100,6 +97,24 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (data.message === 'Invalid Solution') {
                 alert('Solução inválida.');
             } 
+        })
+    }
+    
+    function verifyNumber() {
+        fetch( '/check_number', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({ 'row': row, 'column': column, 'value': value })
+        })
+        .then(function(data) {
+            var resultado = data.resultado;
+            if (resultado) {
+                console.log('Número válido no Sudoku.');
+            } else {
+                console.log('Número inválido no Sudoku.');
+            }
         })
     }
     

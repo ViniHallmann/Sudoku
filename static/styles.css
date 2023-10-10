@@ -57,3 +57,7 @@ body {
 .sudoku_grid td:first-child {
     border-left: 4px solid #333;
 }
+
+.red_number {
+    color: red;
+}
