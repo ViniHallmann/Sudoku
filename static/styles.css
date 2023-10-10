@@ -85,9 +85,34 @@
     width: 100px; 
     height: 40px;
     text-align: center;
+
     font-size: 16px;
     padding: 5px;
     margin: 5px 0; 
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.sudoku_grid tr:nth-child(3n) {
+    border-bottom: 4px solid #333;
+}
+
+.sudoku_grid tr td:nth-child(3n) {
+    border-right: 4px solid #333;
+}
+
+.sudoku_grid tr:first-child {
+    border-top: 4px solid #333;
+}
+.sudoku_grid td:first-child {
+    border-left: 4px solid #333;
+}
+
+.red_number {
+    color: red;
+}
+.selected-cell {
     background-color: #4e4d4d;
     color: white;
     cursor: pointer;

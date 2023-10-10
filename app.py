@@ -14,7 +14,13 @@ def homepage():
 
     display = DisplayMatrix(SIZE, matrix.grid)
     display_answer = DisplayMatrix(SIZE, matrix.grid)
-    display.Reveal_Numbers(80)
+
+    display.Reveal_Numbers(79)
+    grid_data = display.Get_Grid_Data()  
+    print("GRID COM NUMEROS ESCONDIDOS")
+    for i in range (9):
+        print(grid_data[i])
+    return render_template( 'index.html', grid_data = grid_data )
 
     return render_template('index.html', grid_data=display.Get_Grid_Data())
 
@@ -46,11 +52,27 @@ def option():
 def checkSolution():
     grid = request.json['grid']
     CM = CheckMatrix(9, grid)
-    
     if CM.Is_Valid_Solution():
         return jsonify({'message': 'Valid Solution'}), 200
     else:
         return jsonify({'message': 'Invalid Solution'}), 200
+        print("Solução inválida")
+        return jsonify( { 'message': 'Invalid Solution' } ), 200
+    
+@app.route( '/check_number', methods=['POST'] )
+def checkNumber():
+    grid = request.json['grid']
+    num = request.json['num']
+    row = request.json['row']
+    column = request.json['column']
+    CM = CheckMatrix(9, grid)
+    if CM.Check_Grid(num, column, row, grid):
+        print("Número válido")
+        return jsonify( { 'message': 'Valid Number' } ), 200
+    else:
+        print("Número inválido")
+        return jsonify( { 'message': 'Invalid Number' } ), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
