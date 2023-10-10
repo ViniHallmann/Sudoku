@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var cells = document.querySelectorAll('.sudoku_cel');
     cells.forEach(function(cell) {
-        cell.addEventListener('input', function() { // Função para testar os caracteres e só permitir 1 por vez
+        cell.addEventListener('input', function() { 
             var content = this.textContent.trim();
             if (content.length > 1 || !/^[1-9]$/.test(content)) {
                 this.textContent = '';
@@ -43,6 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateSudokuStatus();
                 isSudokuComplete();
             }
+        });
+        
+        cell.addEventListener('blur', function() {
+            isValidRow(this);
+            isValidColumn(this);
+            updateSudokuStatus();
+            isSudokuComplete();
         });
     });
 
@@ -144,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     function isValidColumn(cell){
         var column = cell.parentNode;
+        var value = cell.textContent.trim();
         var colIndex = Array.from(column.children).indexOf(cell);
         var colCells = new Array();
         var equalNumberCol = new Array();
@@ -153,10 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 colCells.push(c);
             }
         });
-        for ( i = 0; i < colCells.length; i++){
-            console.log(colCells[i].textContent.trim());
-        }
-        var value = cell.textContent.trim();
 
         for ( i = 0; i < colCells.length; i++){
             if (colCells[i].textContent.trim() === value){
