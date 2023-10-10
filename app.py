@@ -3,8 +3,8 @@ from display_matrix import DisplayMatrix
 from check_matrix import CheckMatrix
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 
-app =  Flask(__name__)
-#Toda pagina tem um route e uma função
+app = Flask(__name__)
+
 @app.route("/")
 def homepage():
     SIZE = 9
@@ -15,28 +15,42 @@ def homepage():
     display = DisplayMatrix(SIZE, matrix.grid)
     display_answer = DisplayMatrix(SIZE, matrix.grid)
     display.Reveal_Numbers(80)
-    grid_data = display.Get_Grid_Data()  
-    print("GRID COM NUMEROS ESCONDIDOS")
-    for i in range (9):
-        print(grid_data[i])
-    return render_template( 'index.html', grid_data = grid_data )
 
-@app.route( '/check_solution', methods=['POST'] )
+    return render_template('index.html', grid_data=display.Get_Grid_Data())
+
+@app.route('/processar', methods=['POST'])
+def option():
+    data = request.get_json()
+    difficulty = data.get('difficulty')
+    SIZE = 9
+    matrix = CreateMatrix(SIZE)
+    matrix.Initialize_Grid()
+    matrix.Fill_Grid()
+    
+    display = DisplayMatrix(SIZE, matrix.grid)
+    
+    if difficulty == 1:
+        print('FÁCIL')
+        display.Reveal_Numbers(70)
+    elif difficulty == 2:
+        display.Reveal_Numbers(50)
+    elif difficulty == 3:
+        display.Reveal_Numbers(30)
+    
+    grid_data = display.Get_Grid_Data()
+    
+    return jsonify(grid_data=grid_data)
+
+
+@app.route('/check_solution', methods=['POST'])
 def checkSolution():
     grid = request.json['grid']
-    print("GRID QUE O JSON RETORNOU")
-    for i in range (9):
-        print(grid[i])
     CM = CheckMatrix(9, grid)
     
-    print(CM.Is_Valid_Solution())
     if CM.Is_Valid_Solution():
-        print("Solução válida")
-        return jsonify( { 'message': 'Valid Solution' } ), 200
+        return jsonify({'message': 'Valid Solution'}), 200
     else:
-        print("Solução inválida")
-        return jsonify( { 'message': 'Invalid Solution' } ), 200
+        return jsonify({'message': 'Invalid Solution'}), 200
 
 if __name__ == "__main__":
-    #homepage()
-    app.run( debug = True )
+    app.run(debug=True)

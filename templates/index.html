@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Meu Sudoku </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="static/scripts/script.js"></script>
 </head>
+
 <body>
-    <div class = "container">
-        <div class = "sudoku_container">
-            <h1>Sudoku</h1> 
-                <div class="sudoku_status">
-                    <p id="filled_cells"></p>
-                </div>
-                <table id="sudoku_table" class ="sudoku_grid">
-                    {% for row in grid_data %}
-                        <tr>
-                            {% for cell in row %}
-                                <td class ="sudoku_cel" contentEditable="true" colspan="1">{{ cell }}</td>
-                            {% endfor %}
-                        </tr>
+    <div class="container">
+        <div class="sudoku_container">
+            <h1>Sudoku</h1>
+            <div class="sudoku_status">
+                <p id="filled_cells"></p>
+            </div>
+            <table id="sudoku_table" class="sudoku_grid">
+                {% for row in grid_data %}
+                <tr>
+                    {% for cell in row %}
+                    <td class="sudoku_cel" contentEditable="true" colspan="1">{{ cell }}</td>
                     {% endfor %}
-                </table>
-                
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="buttons">
+            <button class="button-easy">Easy</button>
+            <button class="button-medium">Medium</button>
+            <button class="button-hard">Hard</button>
         </div>
     </div>
 </body>
+
 </html>

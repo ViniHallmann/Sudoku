@@ -125,5 +125,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     updateSudokuStatus();
-    cells.setAttribute('contentEditable', 'true');
+
+    document.querySelector('.button-easy').addEventListener('click', function() {
+        fetch('/processar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ difficulty: 1 })
+        })
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(function(data) {
+           //  updateGrid(data.grid_data);
+        });
+    });
+    
+    
+    document.querySelector('.button-medium').addEventListener('click', function() {
+        alert('Você clicou no botão "Médio"');
+    });
+    
+    document.querySelector('.button-hard').addEventListener('click', function() {
+        alert('Você clicou no botão "Difícil"');
+    });
+    
+    /*function updateGrid(newGridData) {
+        var cells = document.querySelectorAll('.sudoku_cel');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].textContent = newGridData[i];
+        }
+    }  */  
+
 });
