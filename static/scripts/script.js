@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var cells = document.querySelectorAll('.sudoku_cel');
     cells.forEach(function(cell) {
-        cell.addEventListener('input', function() { // Função para testar os caracteres e só permitir 1 por vez
+        cell.addEventListener('input', function() { 
             var content = this.textContent.trim();
             if (content.length > 1 || !/^[1-9]$/.test(content)) {
                 this.textContent = '';
@@ -38,10 +38,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     this.contentEditable = true;
                 }
-                verifyNumber();
+                isValidRow(this);
+                isValidColumn(this);
                 updateSudokuStatus();
                 isSudokuComplete();
             }
+        });
+        
+        cell.addEventListener('blur', function() {
+            isValidRow(this);
+            isValidColumn(this);
+            updateSudokuStatus();
+            isSudokuComplete();
         });
     });
 
@@ -113,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(data) {
             console.log(data);
             if (data.message === 'Valid Solution') {
-                // alert("");
                 alert('Parabens voce completou o sudoku!!');
             } else if (data.message === 'Invalid Solution') {
                 alert('Solução inválida.');
@@ -121,22 +128,55 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     }
     
-    function verifyNumber() {
-        fetch( '/check_number', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({ 'row': row, 'column': column, 'value': value })
-        })
-        .then(function(data) {
-            var resultado = data.resultado;
-            if (resultado) {
-                console.log('Número válido no Sudoku.');
-            } else {
-                console.log('Número inválido no Sudoku.');
+    function isValidRow(cell){
+        var row = cell.parentNode;
+        var value = cell.textContent.trim();
+        var rowCells = Array.from(row.children);
+        var equalNumberRow = new Array();
+        for ( i = 0; i < rowCells.length; i++){
+            if (rowCells[i].textContent.trim() === value){
+                equalNumberRow.push(rowCells[i]);
             }
-        })
+        }
+        if (equalNumberRow.length > 1){
+            equalNumberRow.forEach(function(cell){
+                cell.classList.add('red-number');
+            });
+        }
+        else{
+            rowCells.forEach(function(cell){
+                cell.classList.remove('red-number');
+            });
+        }
+    }
+    function isValidColumn(cell){
+        var column = cell.parentNode;
+        var value = cell.textContent.trim();
+        var colIndex = Array.from(column.children).indexOf(cell);
+        var colCells = new Array();
+        var equalNumberCol = new Array();
+        cells.forEach(function(c) {
+            var rowIndex = Array.from(c.parentNode.children).indexOf(c);
+            if (rowIndex === colIndex) {
+                colCells.push(c);
+            }
+        });
+
+        for ( i = 0; i < colCells.length; i++){
+            if (colCells[i].textContent.trim() === value){
+                equalNumberCol.push(colCells[i]);
+            }
+        }
+        if (equalNumberCol.length > 1){
+            equalNumberCol.forEach(function(cell){
+                cell.classList.add('red-number');
+            });
+        }
+        else{
+            colCells.forEach(function(cell){
+                cell.classList.remove('red-number');
+            });
+        }
     }
     
     updateSudokuStatus();
