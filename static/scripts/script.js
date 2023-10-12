@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-    
+
         cell.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault(); 
@@ -180,14 +180,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     updateSudokuStatus();
-
+/* 
     document.querySelector('.button-easy').addEventListener('click', function() {
         fetch('/processar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ difficulty: 1 })
+            body: JSON.stringify({ difficulty: 1 }) // Envie a dificuldade como JSON
         })
         .then(function(response) {
             if (response.ok) {
@@ -195,9 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .then(function(data) {
+            // Atualize o grid na página HTML com os dados atualizados
            //  updateGrid(data.grid_data);
         });
     });
+    
+
     
     
     document.querySelector('.button-medium').addEventListener('click', function() {
@@ -208,11 +211,20 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Você clicou no botão "Difícil"');
     });
     
-    /*function updateGrid(newGridData) {
-        var cells = document.querySelectorAll('.sudoku_cel');
-        for (var i = 0; i < cells.length; i++) {
-            cells[i].textContent = newGridData[i];
+  // Função para atualizar o grid na página HTML
+function updateGrid(newGridData) {
+    var cells = document.querySelectorAll('.sudoku_cel');
+
+    for (var i = 0; i < cells.length; i++) {
+        var value = newGridData;
+        if (value === 0) {
+            cells[i].textContent = '';  // Limpe a célula se o valor for 0
+        } else {
+            cells[i].textContent = value;  // Atualize a célula com o novo valor
         }
-    }  */  
+    }
+}
+*/ 
+
 
 });

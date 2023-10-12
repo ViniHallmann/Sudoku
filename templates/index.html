@@ -24,11 +24,16 @@
                 {% endfor %}
             </table>
         </div>
-        <div class="buttons">
-            <button class="button-easy">Easy</button>
-            <button class="button-medium">Medium</button>
-            <button class="button-hard">Hard</button>
-        </div>
+        <form method="post" action="/processar">
+            <label for="difficulty">Escolha a dificuldade:</label>
+            <select name="difficulty" id="difficulty">
+              <option value="1">Fácil</option>
+              <option value="2">Médio</option>
+              <option value="3">Difícil</option>
+            </select>
+            <input type="submit" value="Iniciar Jogo">
+          </form>
+          
     </div>
 </body>
 

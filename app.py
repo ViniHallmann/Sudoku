@@ -14,38 +14,40 @@ def homepage():
 
     display = DisplayMatrix(SIZE, matrix.grid)
     display_answer = DisplayMatrix(SIZE, matrix.grid)
-
-    display.Reveal_Numbers(79)
+    processar()
+    #option()
+    #display.Reveal_Numbers(79)
     grid_data = display.Get_Grid_Data()  
     print("GRID COM NUMEROS ESCONDIDOS")
+    
     for i in range (9):
         print(grid_data[i])
     return render_template( 'index.html', grid_data = grid_data )
 
-    return render_template('index.html', grid_data=display.Get_Grid_Data())
+    #return render_template('index.html', grid_data=display.Get_Grid_Data())
 
-@app.route('/processar', methods=['POST'])
-def option():
-    data = request.get_json()
-    difficulty = data.get('difficulty')
+@app.route("/processar", methods=['POST'])
+def processar():
+    difficulty = request.form.get('difficulty')
     SIZE = 9
     matrix = CreateMatrix(SIZE)
     matrix.Initialize_Grid()
     matrix.Fill_Grid()
-    
     display = DisplayMatrix(SIZE, matrix.grid)
-    
-    if difficulty == 1:
-        print('FÁCIL')
+
+    # Chame a função reveal_numbers com base na dificuldade escolhida
+    if difficulty == "1":
         display.Reveal_Numbers(70)
-    elif difficulty == 2:
+    elif difficulty == "2":
         display.Reveal_Numbers(50)
-    elif difficulty == 3:
+    elif difficulty == "3":
         display.Reveal_Numbers(30)
-    
-    grid_data = display.Get_Grid_Data()
-    
-    return jsonify(grid_data=grid_data)
+
+    grid_data = matrix.grid  # Obtenha o grid gerado
+
+    return render_template('index.html', grid_data=grid_data)
+
+
 
 
 @app.route('/check_solution', methods=['POST'])
