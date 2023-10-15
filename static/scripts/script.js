@@ -14,18 +14,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 c.classList.remove('selected-cell');
                 c.classList.remove('primary-cell');
             });
+        
             this.classList.add('primary-cell');
             var cellIndex = Array.from(this.parentNode.children).indexOf(this);
             var rowCells = Array.from(this.parentNode.children);
-
+        
             rowCells.forEach(function(rowCell) {
                 rowCell.classList.add('selected-cell');
             });
+        
             cells.forEach(function(colCell) {
                 if (Array.from(colCell.parentNode.children).indexOf(colCell) === cellIndex) {
                     colCell.classList.add('selected-cell');
                 }
             });
+            updateSudokuStatus();
+            isSudokuComplete();
         });
 
         cell.addEventListener('keydown', function(event) {
@@ -45,14 +49,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        cell.addEventListener('blur', function() {
+       /* cell.addEventListener('blur', function() {
             isValidRow(this);
             isValidColumn(this);
             updateSudokuStatus();
             isSudokuComplete();
-        });
+        });*/
     });
-
 
     function updateSudokuStatus() {
         var filledCells = 0;
@@ -127,57 +130,50 @@ document.addEventListener('DOMContentLoaded', function() {
             } 
         })
     }
-    
-    function isValidRow(cell){
+    function removeRowRedNumbers( rowCells ){
+        rowCells.forEach(function(rowCell) {
+            rowCell.classList.remove('red-number');
+        });
+    }
+    function removeColRedNumbers( colCells ){
+        colCells.forEach(function(colCell) {
+            colCell.classList.remove('red-number');
+        });
+    }
+    function isValidRow( cell ){
         var row = cell.parentNode;
-        var value = cell.textContent.trim();
         var rowCells = Array.from(row.children);
-        var equalNumberRow = new Array();
+        removeRowRedNumbers(rowCells);
         for ( i = 0; i < rowCells.length; i++){
-            if (rowCells[i].textContent.trim() === value){
-                equalNumberRow.push(rowCells[i]);
+            for ( j = i + 1; j < rowCells.length; j++){
+                if (rowCells[i].textContent.trim() === rowCells[j].textContent.trim()){
+                    rowCells[i].classList.add('red-number');
+                    rowCells[j].classList.add('red-number');
+                }
             }
-        }
-        if (equalNumberRow.length > 1){
-            equalNumberRow.forEach(function(cell){
-                cell.classList.add('red-number');
-            });
-        }
-        else{
-            rowCells.forEach(function(cell){
-                cell.classList.remove('red-number');
-            });
-        }
+        } 
     }
     function isValidColumn(cell){
         var column = cell.parentNode;
-        var value = cell.textContent.trim();
         var colIndex = Array.from(column.children).indexOf(cell);
         var colCells = new Array();
-        var equalNumberCol = new Array();
         cells.forEach(function(c) {
             var rowIndex = Array.from(c.parentNode.children).indexOf(c);
             if (rowIndex === colIndex) {
                 colCells.push(c);
             }
         });
-
+        removeColRedNumbers(colCells);
         for ( i = 0; i < colCells.length; i++){
-            if (colCells[i].textContent.trim() === value){
-                equalNumberCol.push(colCells[i]);
+            for ( j = i + 1; j < colCells.length; j++){
+                if (colCells[i].textContent.trim() === colCells[j].textContent.trim()){
+                    colCells[i].classList.add('red-number');
+                    colCells[j].classList.add('red-number');
+                }
             }
         }
-        if (equalNumberCol.length > 1){
-            equalNumberCol.forEach(function(cell){
-                cell.classList.add('red-number');
-            });
-        }
-        else{
-            colCells.forEach(function(cell){
-                cell.classList.remove('red-number');
-            });
-        }
     }
+    
     
     updateSudokuStatus();
 /* 
