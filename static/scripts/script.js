@@ -28,6 +28,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     colCell.classList.add('selected-cell');
                 }
             });
+
+            var rowIndex = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
+            var colIndex = Array.from(this.parentNode.children).indexOf(this);
+
+            cells.forEach(function(squareCell) {
+                var squareRowIndex = Array.from(squareCell.parentNode.parentNode.children).indexOf(squareCell.parentNode);
+                var squareColIndex = Array.from(squareCell.parentNode.children).indexOf(squareCell);
+        
+                if (Math.floor(rowIndex / 3) === Math.floor(squareRowIndex / 3) && Math.floor(colIndex / 3) === Math.floor(squareColIndex / 3)) {
+                    squareCell.classList.add('selected-cell');
+                }
+            });
             updateSudokuStatus();
             isSudokuComplete();
         });
