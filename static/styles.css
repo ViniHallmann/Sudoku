@@ -12,6 +12,7 @@ body {
     background-color: black;
 }
 
+
 .container {
     display: flex;
     flex-direction: column;
@@ -42,6 +43,7 @@ body {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
+    caret-color: transparent;
 }
 
 .sudoku_grid tr:nth-child(3n) {
@@ -85,7 +87,7 @@ body {
 }
 
 .primary-cell{
-    background-color: rgb(153, 150, 150);
+    background-color: rgb(100, 166, 81);
 }
 
 .selected-cell {
