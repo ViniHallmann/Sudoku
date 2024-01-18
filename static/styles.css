@@ -1,17 +1,17 @@
 H1 { 
-    color:white;
+    color:rgb(100, 166, 81);
     margin:0px 0px 2px 0px;
-    font-size:24px;
-    padding:2px 1px 5px 1px;
-    text-align:center;    
+    font-size:36px;
+    padding:15px 5px 5px 5px;
+    text-align:center;
+    font-weight: bold;  
 }
 
 body {
-    color: white;
-    font-family: Arial, sans-serif;
-    background-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    margin: 0;
 }
-
 
 .container {
     display: flex;
@@ -19,67 +19,49 @@ body {
     align-items: center;
 }
 
-.sudoku_container {
+.sudoku-container {
     flex: 1;
     margin-right: 20px;
 }
 
-.sudoku_status {
+.sudoku-status {
     margin-top: 20px;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
 }
 
-.sudoku_grid {
+.sudoku-grid {
     border-collapse: collapse;
     margin: 20px auto;
 }
 
-.sudoku_cel {
-    border: 1px solid #333;
-    width: 40px;
-    height: 40px;
+.sudoku-cell{
+    border: 3px solid #333;
+    width: 60px;
+    height: 60px;
     text-align: center;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
     caret-color: transparent;
 }
 
-.sudoku_grid tr:nth-child(3n) {
-    border-bottom: 4px solid #333;
+
+
+.sudoku-grid tr:nth-child(3n) {
+    border-bottom: 4px solid black;
 }
 
-.sudoku_grid tr td:nth-child(3n) {
-    border-right: 4px solid #333;
+.sudoku-grid tr td:nth-child(3n) {
+    border-right: 4px solid black;
 }
 
-.sudoku_grid tr:first-child {
-    border-top: 4px solid #333;
+.sudoku-grid tr:first-child {
+    border-top: 4px solid black;
 }
 
-.sudoku_grid td:first-child {
-    border-left: 4px solid #333;
-}
-
-.buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    margin-top: 10px; 
-}
-
-.button-easy, .button-medium, .button-hard {
-    width: 100px; 
-    height: 40px;
-    text-align: center;
-
-    font-size: 16px;
-    padding: 5px;
-    margin: 5px 0; 
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
+.sudoku-grid td:first-child {
+    border-left: 4px solid black;
 }
 
 .red-number {
@@ -93,4 +75,36 @@ body {
 .selected-cell {
     background-color: #4e4d4d;
     cursor: pointer;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.form-container form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-select{
+    outline: none;
+    font-size: 16px; 
+    color: #ffffff; 
+    background-color: #333333; 
+    border: none;
+    margin: 0px 10px 0px 5px;
+}
+
+.btn{
+    outline: none;
+    font-size: 16px;  
+    color:rgb(100, 166, 81);
+    background-color: #333333; 
+    border: none;
+    font-weight: bold;
 }
