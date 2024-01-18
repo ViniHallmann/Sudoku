@@ -4,38 +4,25 @@ from check_matrix import CheckMatrix
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 
 app = Flask(__name__)
+SIZE = 9
 
 @app.route("/")
 def homepage():
-    SIZE = 9
     matrix = CreateMatrix(SIZE)
     matrix.Initialize_Grid()
     matrix.Fill_Grid()
-
-    display = DisplayMatrix(SIZE, matrix.grid)
-    display_answer = DisplayMatrix(SIZE, matrix.grid)
-    processar()
-    #option()
-    #display.Reveal_Numbers(79)
-    grid_data = display.Get_Grid_Data()  
-    print("GRID COM NUMEROS ESCONDIDOS")
-    
-    for i in range (9):
-        print(grid_data[i])
-    return render_template( 'index.html', grid_data = grid_data )
-
-    #return render_template('index.html', grid_data=display.Get_Grid_Data())
+    grid_data = matrix.grid 
+    return render_template('index.html', grid_data = grid_data)
 
 @app.route("/processar", methods=['POST'])
 def processar():
     difficulty = request.form.get('difficulty')
-    SIZE = 9
+    
     matrix = CreateMatrix(SIZE)
     matrix.Initialize_Grid()
     matrix.Fill_Grid()
     display = DisplayMatrix(SIZE, matrix.grid)
 
-    # Chame a função reveal_numbers com base na dificuldade escolhida
     if difficulty == "1":
         display.Reveal_Numbers(70)
     elif difficulty == "2":
@@ -43,12 +30,9 @@ def processar():
     elif difficulty == "3":
         display.Reveal_Numbers(30)
 
-    grid_data = matrix.grid  # Obtenha o grid gerado
+    grid_data = matrix.grid 
 
     return render_template('index.html', grid_data=grid_data)
-
-
-
 
 @app.route('/check_solution', methods=['POST'])
 def checkSolution():
@@ -58,9 +42,7 @@ def checkSolution():
         return jsonify({'message': 'Valid Solution'}), 200
     else:
         return jsonify({'message': 'Invalid Solution'}), 200
-        print("Solução inválida")
-        return jsonify( { 'message': 'Invalid Solution' } ), 200
-    
+"""
 @app.route( '/check_number', methods=['POST'] )
 def checkNumber():
     grid = request.json['grid']
@@ -74,7 +56,7 @@ def checkNumber():
     else:
         print("Número inválido")
         return jsonify( { 'message': 'Invalid Number' } ), 200
-
+"""
 
 if __name__ == "__main__":
     app.run(debug=True)
