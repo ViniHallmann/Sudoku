@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-    var cells = document.querySelectorAll('.sudoku_cel');
+    
+    var savedDifficulty = localStorage.getItem('dificulty');
+    if (savedDifficulty) {
+        document.getElementById('difficulty').value = savedDifficulty;
+    }
+    document.getElementById('difficulty').addEventListener('change', function() {
+        localStorage.setItem('dificulty', this.value);
+    });
+    var cells = document.querySelectorAll('.sudoku-cell');
     cells.forEach(function(cell) {
         cell.addEventListener('input', function() { 
             var content = this.textContent.trim();
@@ -10,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         cell.addEventListener('click', function() {
-            console.log(cell)
             cells.forEach(function(c) {
                 c.classList.remove('selected-cell');
                 c.classList.remove('primary-cell');
@@ -92,12 +98,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         var totalCells = cells.length;
         var filledCellsElement = document.getElementById("filled_cells");
-
+        /*
         if (filledCells === cells.length) {
             filledCellsElement.textContent = "Sudoku completo";
         } else {
             filledCellsElement.textContent = `${filledCells}/${totalCells} `;
-        }
+        }*/
     }
     
     function isSudokuComplete() {
@@ -114,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getGridData() {
-        var sudokuTable = document.getElementById('sudoku_table');
+        var sudokuTable = document.getElementById('sudoku-table');
         var gridData = [];
     
         for (var i = 0; i < sudokuTable.rows.length; i++) {
@@ -199,8 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     updateSudokuStatus();
+    
 });
-
 /* 
     document.querySelector('.button-easy').addEventListener('click', function() {
         fetch('/processar', {
@@ -231,27 +237,4 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.button-hard').addEventListener('click', function() {
         alert('Você clicou no botão "Difícil"');
     });
-    
-  // Função para atualizar o grid na página HTML
-function updateGrid(newGridData) {
-    var cells = document.querySelectorAll('.sudoku_cel');
-
-    for (var i = 0; i < cells.length; i++) {
-        var value = newGridData;
-        if (value === 0) {
-            cells[i].textContent = '';  // Limpe a célula se o valor for 0
-        } else {
-            cells[i].textContent = value;  // Atualize a célula com o novo valor
-        }
-    }
-}
-function removeRowRedNumbers( rowCells ){
-        rowCells.forEach(function(rowCell) {
-            rowCell.classList.remove('red-number');
-        });
-    }
-    function removeColRedNumbers( colCells ){
-        colCells.forEach(function(colCell) {
-            colCell.classList.remove('red-number');
-        });
-    }*/
+*/

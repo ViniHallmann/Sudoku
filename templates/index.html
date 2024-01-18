@@ -3,37 +3,44 @@
 
 <head>
     <title>Meu Sudoku </title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="static/scripts/script.js"></script>
 </head>
 
-<body>
+<body class="bg-dark text-white">
     <div class="container">
-        <div class="sudoku_container">
-            <h1>Sudoku</h1>
-            <div class="sudoku_status">
-                <p id="filled_cells"></p>
-            </div>
-            <table id="sudoku_table" class="sudoku_grid">
+        <div>
+            <h1>MeuSudoku</h1>
+        </div>
+        <div class="form-container">
+            <label for="difficulty">Dificuldade:</label>
+            <form method="post" action="/processar">
+                <select class="form-select" name="difficulty" id="difficulty">
+                    <option value="1">Fácil</option>
+                    <option value="2">Médio</option>
+                    <option value="3">Difícil</option>
+                </select>
+                <input class="btn" type="submit" value="Iniciar Jogo">
+            </form>
+        </div>
+        <div class="sudoku-container">
+            <table id="sudoku-table" class="sudoku-grid">
                 {% for row in grid_data %}
                 <tr>
                     {% for cell in row %}
-                    <td class="sudoku_cel" contentEditable="true" colspan="1">{{ cell }}</td>
+                    {%if cell == " " %}
+                        <td class="sudoku-cell" contenteditable="true">{{ cell }}</td>
+                    {% else %}
+                        <td class="sudoku-cell">{{ cell }}</td>
+                    {% endif %}
                     {% endfor %}
                 </tr>
                 {% endfor %}
             </table>
         </div>
-        <form method="post" action="/processar">
-            <label for="difficulty">Escolha a dificuldade:</label>
-            <select name="difficulty" id="difficulty">
-              <option value="1">Fácil</option>
-              <option value="2">Médio</option>
-              <option value="3">Difícil</option>
-            </select>
-            <input type="submit" value="Iniciar Jogo">
-          </form>
-          
     </div>
 </body>
 
