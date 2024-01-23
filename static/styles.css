@@ -20,7 +20,8 @@ body {
 }
 
 .sudoku-container {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
     margin-right: 20px;
 }
 
@@ -38,15 +39,24 @@ body {
 
 .sudoku-cell{
     border: 3px solid #333;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     font-size: 24px;
     font-weight: bold;
     caret-color: transparent;
 }
 
+.sudoku-cell:not(.primary-cell):hover {
+    background-color: #4e4d4d;
+    cursor: pointer;
+}
 
+.initial{
+    color: rgb(100, 166, 81);
+    user-select: none;
+    pointer-events: none;
+}
 
 .sudoku-grid tr:nth-child(3n) {
     border-bottom: 4px solid black;
@@ -107,4 +117,12 @@ body {
     background-color: #333333; 
     border: none;
     font-weight: bold;
+}
+
+.btn-numbers-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }

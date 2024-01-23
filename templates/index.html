@@ -28,18 +28,44 @@
         </div>
         <div class="sudoku-container">
             <table id="sudoku-table" class="sudoku-grid">
-                {% for row in grid_data %}
-                <tr>
-                    {% for cell in row %}
-                    {%if cell == " " %}
-                        <td class="sudoku-cell" contenteditable="true">{{ cell }}</td>
-                    {% else %}
-                        <td class="sudoku-cell">{{ cell }}</td>
-                    {% endif %}
+                {%if grid_data == None %}
+                    {%for y in range(9) %}
+                    <tr>
+                        {%for x in range(9) %}
+                            {%if x == 3 and y == 4 %}
+                                <td class="sudoku-cell initial">S</td>
+                            {% elif x == 4 and y == 4 %}
+                                <td class="sudoku-cell initial">U</td>
+                            {% elif x == 5 and y == 4 %}
+                                <td class="sudoku-cell initial">D</td>
+                            {% elif x == 4 and y == 5 %}
+                                <td class="sudoku-cell initial">O</td>
+                            {% elif x == 4 and y == 3%}
+                                <td class="sudoku-cell initial">K</td>
+                            {% else %}
+                                <td class="sudoku-cell initial"> </td>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
-                </tr>
-                {% endfor %}
+                {% else %}
+                    {% for row in grid_data %}
+                    <tr>
+                        {% for cell in row %}
+                        {%if cell == " " %}
+                            <td class="sudoku-cell" contenteditable="true">{{ cell }}</td>
+                        {% else %}
+                            <td class="sudoku-cell">{{ cell }}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                {% endif %}
             </table>
+            <div class="btn-numbers-container">
+                {% for i in range(1, 10) %}
+                    <button class="btn btn-number btn-lg" onclick="addNumberToCell(i)">{{ i }}</button>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </body>
