@@ -1,64 +1,86 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    //Salva a dificuldade no local storage
     var savedDifficulty = localStorage.getItem('dificulty');
+    //Verifica se existe uma dificuldade salva
     if (savedDifficulty) {
         document.getElementById('difficulty').value = savedDifficulty;
     }
+    //Salva a dificuldade selecionada
     document.getElementById('difficulty').addEventListener('change', function() {
         localStorage.setItem('dificulty', this.value);
     });
+    //Pega as celulas do sudoku
     var cells = document.querySelectorAll('.sudoku-cell');
     cells.forEach(function(cell) {
+        //Evento de input que verifica se o valor é valido
         cell.addEventListener('input', function() { 
             var content = this.textContent.trim();
             if (content.length > 1 || !/^[1-9]$/.test(content)) {
                 this.textContent = '';
             }
         });
-        
+        //Evento de click que seleciona a celula
         cell.addEventListener('click', function() {
+            //Reseta as celulas
             cells.forEach(function(c) {
                 c.classList.remove('selected-cell');
                 c.classList.remove('primary-cell');
             });
-
+            //Seleciona a celula para ser a primary (cor verde)
             this.classList.add('primary-cell');
-            var cellIndex = Array.from(this.parentNode.children).indexOf(this);
-            var rowCells = Array.from(this.parentNode.children);
-            
-            rowCells.forEach(function(rowCell) {
+
+            //Seleciona a linha e adiciona a classe selected-cell
+            var cellsInRow = Array.from(this.parentNode.children);
+            cellsInRow.forEach(function(rowCell) {
                 if (!rowCell.classList.contains('primary-cell')){
                     rowCell.classList.add('selected-cell');
                 }
             });
-        
-            cells.forEach(function(colCell) {
-                if (Array.from(colCell.parentNode.children).indexOf(colCell) === cellIndex && !colCell.classList.contains('primary-cell') ) {
-                    colCell.classList.add('selected-cell');
+            //Seleciona a coluna e adiciona a classe selected-cell
+            var selectedCellColIndex = Array.from(this.parentNode.children).indexOf(this);
+            //Itera sobre cada celula e adiciona aquelas que possuem o mesmo index de coluna da celula selecionada
+            cells.forEach(function(cell) {
+                if (Array.from(cell.parentNode.children).indexOf(cell) === selectedCellColIndex && !cell.classList.contains('primary-cell') ) {
+                    cell.classList.add('selected-cell');
                 }
             });
+            //Seleciona a linha da celula selecionada
+            var selectedCellRowIndex = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
+            /*
+            Itera sobre cada celula e adiciona as celulas ao quadrado que a celula selecionada pertence
+            
+              0 1 2   3 4 5   6 7 8
+            0 0 0 0 | 0 0 0 | 0 0 0
+            1 0 0 0 | 0 0 0 | 0 0 0
+            2 0 0 0 | 0 0 0 | 0 0 0
 
-            var rowIndex = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
-            var colIndex = Array.from(this.parentNode.children).indexOf(this);
+             Por exemplo nesse caso aqui, vamos usar a celula (linha: 0, coluna: 0). 
 
-            cells.forEach(function(squareCell) {
-                var squareRowIndex = Array.from(squareCell.parentNode.parentNode.children).indexOf(squareCell.parentNode);
-                var squareColIndex = Array.from(squareCell.parentNode.children).indexOf(squareCell);
+             Agora olhando para funcao forEach abaixo, ela vai pegar o valor de linha e coluna de cada celula 
+             e fazer o calculo dividindo por 3 a linha e coluna de cada celula que foi iterada e comparar com o resultado da celula exemplo
+             O calculo: Arredondar para baixo(index/3) e se o resultado for igual a celula exemplo, entao a celula pertence ao quadrado da celula exemplo
+
+             A celula exemplo vai resultar em 0/3 e 0/3 -> (0,0) ja a celula da iteracao tambem vai resultar em 0/3 e 0/3 -> (0,0)
+             agora se pegarmos outra celula da iteracao = (linha: 1, coluna: 1)
+             1/3 e 1/3 -> (0.333,0.333) arredondando para baixo fica (0,0) o que fica igual a celula exemplo
+             agora outra celula da iteracao = (linha: 2, coluna: 2)
+             2/3 e 2/3 -> (0.666,0.666) arredondando para baixo fica (0,0), tambem pertence ao quadrado da celula exemplo
+             por ultimo se pegarmos mais uma celula da iteracao = (linha: 3, coluna: 3)
+            3/3 e 3/3 -> (1,1) arredondando para baixo fica (1,1) que nao pertence ao quadrado da celula exemplo
+            */
+            cells.forEach(function(cell) {
+                var cellRowIndex = Array.from(cell.parentNode.parentNode.children).indexOf(cell.parentNode);
+                var cellColIndex = Array.from(cell.parentNode.children).indexOf(cell);
         
-                if (Math.floor(rowIndex / 3) === Math.floor(squareRowIndex / 3) && Math.floor(colIndex / 3) === Math.floor(squareColIndex / 3) && !squareCell.classList.contains('primary-cell')) {
-                    squareCell.classList.add('selected-cell');
+                if (Math.floor(selectedCellRowIndex / 3) === Math.floor(cellRowIndex / 3) && Math.floor(selectedCellColIndex / 3) === Math.floor(cellColIndex / 3) && !cell.classList.contains('primary-cell')) {
+                    cell.classList.add('selected-cell');
                 }
             });
             isSudokuComplete();
         });
 
         cell.addEventListener('input', function() {
-            removeConflict();
-            resetToWhiteColor(this);
-            isValidRow(this);
-            isValidColumn(this);
-            isValidSquare(this);
-            isSudokuComplete();
+            handleCellConflict(this);
         });
 
         cell.addEventListener('keydown', function(event) {
@@ -70,34 +92,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     this.contentEditable = true;
                 }
-                removeConflict();
-                resetToWhiteColor(this);
-                isValidRow(this);
-                isValidColumn(this);
-                isValidSquare(this);
-                isSudokuComplete();
+                handleCellConflict(this);
             }
             if ( event.key === 'Backspace' || event.key === 'Delete'){
                 this.textContent = '';
-                removeConflict();
-                resetToWhiteColor(this);
-                isValidRow(this);
-                isValidColumn(this);
-                isValidSquare(this);
-                isSudokuComplete();
+                handleCellConflict(this);
             }
         });
         
         cell.addEventListener('blur', function() {
-            removeConflict();
-            resetToWhiteColor(this);
-            isValidRow(this);
-            isValidColumn(this);
-            isValidSquare(this);
-            isSudokuComplete();
+            handleCellConflict(this);
         });
     });
-    
+
+    function verifyCell(cell){
+        isValidRow(cell);
+        isValidColumn(cell);
+        isValidSquare(cell);
+        isSudokuComplete();
+    }
+
+    function handleCellConflict(cell) {
+        removeConflict();
+        resetToWhiteColor(cell);
+        verifyCell(cell);
+    }
     function isSudokuComplete() {
         var isComplete = true;
         cells.forEach(function(cell) {
@@ -124,15 +143,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var value = cell.textContent.trim(); 
                 gridRow.push(parseInt(value));
             }
-    
             gridData.push(gridRow);
         }
-    
         return gridData;
     }
 
     function verifySolution() {
-
         fetch('/check_solution', {
             method: 'POST',
             headers: {
@@ -146,11 +162,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .then(function(data) {
-            console.log(data);
             if (data.message === 'Valid Solution') {
-                alert('Parabens voce completou o sudoku!!');
+                //alert('Parabens voce completou o sudoku!!');
             } else if (data.message === 'Invalid Solution') {
-                alert('Solução inválida.');
+                //alert('Solução inválida.');
             } 
         })
     }
@@ -160,9 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function removeConflict(){
         cells.forEach( function(c) {
             c.classList.remove('red-number');
-            isValidRow(c);
-            isValidColumn(c);
-            isValidSquare(c);
+            verifyCell(c);
         }); 
     }
     function isValidRow( cell ){
@@ -218,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
+
     document.querySelectorAll('.btn-number').forEach(function(button) {
         button.addEventListener('click', function() {
             var number = this.textContent;
@@ -230,11 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var selectedCell = document.querySelector('.primary-cell');
         if (selectedCell) {
             selectedCell.textContent = number;
-            isValidRow(selectedCell);
-            isValidColumn(selectedCell);
-            removeConflict();
-            resetToWhiteColor(selectedCell);
-            isSudokuComplete();
+            handleCellConflict(selectedCell);
         }
     }
 });
