@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     var savedDifficulty = localStorage.getItem('dificulty');
     if (savedDifficulty) {
         document.getElementById('difficulty').value = savedDifficulty;
@@ -49,7 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     squareCell.classList.add('selected-cell');
                 }
             });
-            updateSudokuStatus();
+            isSudokuComplete();
+        });
+
+        cell.addEventListener('input', function() {
+            removeConflict();
+            resetToWhiteColor(this);
+            isValidRow(this);
+            isValidColumn(this);
+            isValidSquare(this);
             isSudokuComplete();
         });
 
@@ -58,53 +66,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 event.preventDefault(); 
                 var value = this.textContent.trim();
                 if (isNaN(value) || value === '') {
-                    //alert('Por favor, insira um valor!');
                     this.textContent = '';
                 } else {
                     this.contentEditable = true;
                 }
-                isValidRow(this);
-                isValidColumn(this);
                 removeConflict();
                 resetToWhiteColor(this);
-                updateSudokuStatus();
+                isValidRow(this);
+                isValidColumn(this);
+                isValidSquare(this);
                 isSudokuComplete();
             }
             if ( event.key === 'Backspace' || event.key === 'Delete'){
                 this.textContent = '';
-                isValidRow(this);
-                isValidColumn(this);
                 removeConflict();
                 resetToWhiteColor(this);
-                updateSudokuStatus();
+                isValidRow(this);
+                isValidColumn(this);
+                isValidSquare(this);
                 isSudokuComplete();
             }
         });
         
         cell.addEventListener('blur', function() {
+            removeConflict();
+            resetToWhiteColor(this);
             isValidRow(this);
             isValidColumn(this);
-            updateSudokuStatus();
+            isValidSquare(this);
             isSudokuComplete();
         });
     });
-
-    function updateSudokuStatus() {
-        var filledCells = 0;
-        cells.forEach(function(cell) {
-            if (cell.textContent !== " ") {
-                filledCells++;
-            }
-        });
-        var totalCells = cells.length;
-        var filledCellsElement = document.getElementById("filled_cells");
-        /*
-        if (filledCells === cells.length) {
-            filledCellsElement.textContent = "Sudoku completo";
-        } else {
-            filledCellsElement.textContent = `${filledCells}/${totalCells} `;
-        }*/
-    }
     
     function isSudokuComplete() {
         var isComplete = true;
@@ -170,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
             c.classList.remove('red-number');
             isValidRow(c);
             isValidColumn(c);
+            isValidSquare(c);
         }); 
     }
     function isValidRow( cell ){
@@ -177,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var rowCells = Array.from(row.children);
         for ( i = 0; i < rowCells.length; i++){
             for ( j = i + 1; j < rowCells.length; j++){
-                if (rowCells[i].textContent.trim() === rowCells[j].textContent.trim()){
+                if (rowCells[i].textContent.trim() === rowCells[j].textContent.trim() && rowCells[i].textContent.trim() !== ''){
                     rowCells[i].classList.add('red-number');
                     rowCells[j].classList.add('red-number');
                 }
@@ -196,45 +189,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         for ( i = 0; i < colCells.length; i++){
             for ( j = i + 1; j < colCells.length; j++){
-                if (colCells[i].textContent.trim() === colCells[j].textContent.trim()){
+                if (colCells[i].textContent.trim() === colCells[j].textContent.trim() && colCells[i].textContent.trim() !== ''){
                     colCells[i].classList.add('red-number');
                     colCells[j].classList.add('red-number');
                 }
             }
         }
     }
-    
-    updateSudokuStatus();
-    
-});
-/* 
-    document.querySelector('.button-easy').addEventListener('click', function() {
-        fetch('/processar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ difficulty: 1 }) // Envie a dificuldade como JSON
-        })
-        .then(function(response) {
-            if (response.ok) {
-                return response.json();
+    function isValidSquare(cell){
+        var rowIndex = Array.from(cell.parentNode.parentNode.children).indexOf(cell.parentNode);
+        var colIndex = Array.from(cell.parentNode.children).indexOf(cell);
+        
+        var startRowIndex = Math.floor(rowIndex / 3) * 3;
+        var startColIndex = Math.floor(colIndex / 3) * 3;
+        var squareCells = new Array();
+        for (i = startRowIndex; i < startRowIndex + 3; i++){
+            for (j = startColIndex; j < startColIndex + 3; j++){
+                var currentCell = cell.parentNode.parentNode.children[i].children[j];
+                squareCells.push(currentCell);
             }
-        })
-        .then(function(data) {
-            // Atualize o grid na página HTML com os dados atualizados
-           //  updateGrid(data.grid_data);
+        }
+        for (i = 0; i < squareCells.length; i++){
+            for (j = i + 1; j < squareCells.length; j++){
+                if (squareCells[i].textContent.trim() === squareCells[j].textContent.trim() && squareCells[i].textContent.trim() !== ''){
+                    squareCells[i].classList.add('red-number');
+                    squareCells[j].classList.add('red-number');
+                }
+            }
+        }
+    }
+    
+    document.querySelectorAll('.btn-number').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var number = this.textContent;
+            addNumberToCell(number);
         });
     });
     
-
-    
-    
-    document.querySelector('.button-medium').addEventListener('click', function() {
-        alert('Você clicou no botão "Médio"');
-    });
-    
-    document.querySelector('.button-hard').addEventListener('click', function() {
-        alert('Você clicou no botão "Difícil"');
-    });
-*/
+    function addNumberToCell(number) {
+        var selectedCell = document.querySelector('.primary-cell');
+        if (selectedCell) {
+            selectedCell.textContent = number;
+            isValidRow(selectedCell);
+            isValidColumn(selectedCell);
+            removeConflict();
+            resetToWhiteColor(selectedCell);
+            isSudokuComplete();
+        }
+    }
+});
