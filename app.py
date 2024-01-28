@@ -8,7 +8,7 @@ SIZE = 9
 
 @app.route("/")
 def homepage():
-    return render_template('index.html', grid_data=None)
+    return render_template('index.html', full_grid=None, grid_with_hidden_numbers=None)
 
 @app.route("/processar", methods=['POST'])
 def processar():

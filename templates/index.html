@@ -28,7 +28,7 @@
         </div>
         <div class="sudoku-container">
             <table id="sudoku-table" class="sudoku-grid">
-                {%if grid_data == None %}
+                {%if full_grid == None %}
                     {%for y in range(9) %}
                     <tr>
                         {%for x in range(9) %}
