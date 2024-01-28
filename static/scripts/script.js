@@ -238,6 +238,14 @@ document.addEventListener('DOMContentLoaded', function() {
             addNumberToCell(number);
         });
     });
+
+    document.querySelector('.btn-remove').addEventListener('click', function() {
+        removeNumberFromCell();
+    });
+
+    document.querySelector('.btn-hint').addEventListener('click', function() {
+        hint();
+    });
     
     function addNumberToCell(number) {
         var selectedCell = document.querySelector('.primary-cell');
@@ -245,5 +253,26 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedCell.textContent = number;
             handleCellConflict(selectedCell);
         }
+    }
+
+    function removeNumberFromCell() {
+        var selectedCell = document.querySelector('.primary-cell');
+        if (selectedCell && !selectedCell.classList.contains('default-cell')) {
+            selectedCell.textContent = '';
+            handleCellConflict(selectedCell);
+        }
+    }
+
+    function hint(){
+        var selectedCell = document.querySelector('.primary-cell');
+        var selectedCellColIndex = Array.from(selectedCell.parentNode.children).indexOf(selectedCell);
+        var selectedCellRowIndex = Array.from(selectedCell.parentNode.parentNode.children).indexOf(selectedCell.parentNode)
+        var bodyElement = document.querySelector('body');
+        var fullGridData = JSON.parse(bodyElement.getAttribute('data-full-grid'));
+        if (selectedCell && !selectedCell.classList.contains('default-cell') && selectedCell.textContent === ' '){
+            selectedCell.textContent = fullGridData[selectedCellRowIndex][selectedCellColIndex];
+            handleCellConflict(selectedCell);
+        }
+        console.log(fullGridData);
     }
 });

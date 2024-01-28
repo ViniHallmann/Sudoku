@@ -7,10 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="static/scripts/script.js"></script>
+    <script src="static/scripts/script.js" var fullGridData = {{ full_grid | tojson | safe }};></script>
 </head>
 
-<body class="bg-dark text-white">
+<body class="bg-dark text-white" data-full-grid="{{ full_grid | tojson | safe }}">
     <div class="container">
         <div>
             <h1>MeuSudoku</h1>
@@ -48,26 +48,32 @@
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    {% for row in grid_data %}
+                    {% for row in grid_with_hidden_numbers%}
                     <tr>
                         {% for cell in row %}
-                        {%if cell == " " %}
-                            <td class="sudoku-cell" contenteditable="true">{{ cell }}</td>
-                        {% else %}
-                            <td class="sudoku-cell">{{ cell }}</td>
-                        {% endif %}
+                            {%if cell == " " %}
+                                <td class="sudoku-cell" contenteditable="true">{{ cell }}</td>
+                            {% else %}
+                                <td class="sudoku-cell default-cell">{{ cell }}</td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                     {% endfor %}
                 {% endif %}
             </table>
+            <div class="btn-utilitary">
+                <button class="btn btn-lg btn-remove" onclick="removeNumberFromCell()">Apagar</button>
+                <button class="btn btn-lg btn-hint" onclick="hint()">Dica</button>
+                <button class="btn btn-lg" onclick="c()">Anotar</button>
+            </div>
             <div class="btn-numbers-container">
                 {% for i in range(1, 10) %}
-                    <button class="btn btn-number btn-lg" onclick="addNumberToCell(i)">{{ i }}</button>
+                    <button class="btn btn-lg btn-number " onclick="addNumberToCell(i)">{{ i }}</button>
                 {% endfor %}
             </div>
         </div>
     </div>
+    
 </body>
 
 </html>

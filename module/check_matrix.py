@@ -28,6 +28,19 @@ class CheckMatrix:
 
     def Check_Grid ( self, num, column, row, grid ):
         return self.Check_Column( num, column, grid ) and self.Check_Row( num, row, grid ) and self.Check_Square( num, column, row, grid )
+    
+    def Check_Quadrant(self, start_row, start_col, grid):
+            nums = set()
+            for row in range(start_row, start_row + self.box_size):
+                for col in range(start_col, start_col + self.box_size):
+                    num = grid[row][col]
+                    if num in nums or num < 1 or num > 9:
+                        return False
+                    nums.add(num)
+            return True
+    
+    def Get_Cell_Number(self, column, row):
+        return self.grid[row][column]
 
     def Is_Grid_Full ( self ):
         for row in range (self.SIZE ):
@@ -43,13 +56,5 @@ class CheckMatrix:
                     return False
         return True
 
-    def Check_Quadrant(self, start_row, start_col, grid):
-        nums = set()
-        for row in range(start_row, start_row + self.box_size):
-            for col in range(start_col, start_col + self.box_size):
-                num = grid[row][col]
-                if num in nums or num < 1 or num > 9:
-                    return False
-                nums.add(num)
-        return True
+    
 

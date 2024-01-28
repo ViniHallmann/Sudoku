@@ -22,7 +22,6 @@ body {
 .sudoku-container {
     display: flex;
     flex-direction: column;
-    margin-right: 20px;
 }
 
 .sudoku-status {
@@ -111,12 +110,23 @@ body {
 }
 
 .btn{
-    outline: none;
     font-size: 16px;  
     color:rgb(100, 166, 81);
     background-color: #333333; 
-    border: none;
-    font-weight: bold;
+    font-weight: var(--btn-font-weight, bold);
+}
+.btn:hover {
+    color: rgb(100, 166, 81) !important;
+    border-color: rgb(100, 166, 81) !important;
+  }
+  
+.btn-utilitary{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .btn-numbers-container{
@@ -125,4 +135,8 @@ body {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+}
+
+.teste{
+    color: red;
 }
