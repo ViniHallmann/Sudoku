@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function addNumberToCell(number) {
         var selectedCell = document.querySelector('.primary-cell');
-        if (selectedCell) {
+        if (selectedCell && !selectedCell.classList.contains('default-cell')) {
             selectedCell.textContent = number;
             handleCellConflict(selectedCell);
         }

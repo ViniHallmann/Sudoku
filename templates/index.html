@@ -52,13 +52,13 @@
                     <tr>
                         {% for cell in row %}
                             {%if cell == " " %}
-                            <td class="sudoku-cell" contenteditable="true">
+                            <td class="sudoku-cell empty-cell" contenteditable="true">
                                 {{ cell }}
-                                <table class="note-grid">
+                                <table class="notes-grid">
                                     {% for i in range(3) %}
                                         <tr>
                                             {% for j in range(3) %}
-                                                <td class="inner-cell" contenteditable="true">{{i + j}}</td>
+                                                <td class="inner-cell">{{i + j}}</td>
                                             {% endfor %}
                                         </tr>
                                     {% endfor %}
