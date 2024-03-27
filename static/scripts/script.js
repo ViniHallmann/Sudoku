@@ -28,7 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             //Seleciona a celula para ser a primary (cor verde)
             this.classList.add('primary-cell');
-
+            //Procura por celulas que possuem o mesmo valor da celula selecionada e adiciona a classe selected-cell
+            var primaryCellNumber = parseInt(this.textContent);
+            cells.forEach(function(cell) {
+                var cellNumber = parseInt(cell.textContent);
+                
+                if (cellNumber === primaryCellNumber && !cell.classList.contains('primary-cell')) {
+                    cell.classList.add('selected-cell');
+                }
+            });
             //Seleciona a linha e adiciona a classe selected-cell
             var cellsInRow = Array.from(this.parentNode.children);
             cellsInRow.forEach(function(rowCell) {
@@ -76,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.classList.add('selected-cell');
                 }
             });
+            
             isSudokuComplete();
         });
 

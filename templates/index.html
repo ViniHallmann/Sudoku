@@ -56,7 +56,18 @@
                     <tr>
                         {% for cell in row %}
                             {%if cell == " " %}
-                                <td class="sudoku-cell" contenteditable="true">{{ cell }}</td>
+                            <td class="sudoku-cell" contenteditable="true">
+                                {{ cell }}
+                                <table class="note-grid">
+                                    {% for i in range(3) %}
+                                        <tr>
+                                            {% for j in range(3) %}
+                                                <td class="inner-cell" contenteditable="true">{{i + j}}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </td>
                             {% else %}
                                 <td class="sudoku-cell default-cell">{{ cell }}</td>
                             {% endif %}
