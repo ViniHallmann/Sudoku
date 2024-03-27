@@ -249,17 +249,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function addNumberToCell(number) {
         var selectedCell = document.querySelector('.primary-cell');
-        if (selectedCell) {
-            selectedCell.textContent = number;
-            handleCellConflict(selectedCell);
+        if (selectedCell && !selectedCell.classList.contains('default-cell')) {  // se a celula nao for default
+            selectedCell.textContent = number; // entao a celula recebe o numero
+            handleCellConflict(selectedCell);  // verifica conflitos 
         }
     }
 
     function removeNumberFromCell() {
         var selectedCell = document.querySelector('.primary-cell');
-        if (selectedCell && !selectedCell.classList.contains('default-cell')) {
-            selectedCell.textContent = '';
-            handleCellConflict(selectedCell);
+        if (selectedCell && !selectedCell.classList.contains('default-cell')) { // se a celula nao for default
+            selectedCell.textContent = ''; // remove e deixa vazio 
+            handleCellConflict(selectedCell); // verifica novos conflitos 
         }
     }
 
@@ -275,4 +275,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         console.log(fullGridData);
     }
+
+// funcao do contador ( cronometro )
+var timer;
+var ele = document.getElementById('timer');
+
+(function (){
+  var sec = 0;
+  var min = 0;
+  timer = setInterval(()=>{
+    if(sec == 60)
+    min++;
+    if(sec < 10)
+    ele.innerHTML = '0'+min+':0'+sec;
+    else
+        ele.innerHTML = '00:'+sec;
+    sec ++;
+  }, 1000) // each 1 second
+})() 
+
+function pause(){
+  clearInterval(timer);
+}
+
 });
+
+
