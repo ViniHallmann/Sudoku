@@ -33,11 +33,12 @@ def processar():
 @app.route('/check_solution', methods=['POST'])
 def checkSolution():
     grid = request.json['grid']
+    print(grid)
     CM = CheckMatrix(9, grid)
     if CM.Is_Valid_Solution():
         return jsonify({'message': 'Valid Solution'}), 200
     else:
-        return jsonify({'message': 'Invalid Solution'}), 200
+        return jsonify({'message': 'Invalid Solution'}), 300
 
 @app.route('/number_hint', methods=['POST'])
 def returnHintNumber():
@@ -50,5 +51,6 @@ def returnHintNumber():
     number = CM.Get_Cell_Number(row, column)
     print(number)
     return jsonify({'number': number}), 200
+
 if __name__ == "__main__":
     app.run(debug=True)

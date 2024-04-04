@@ -137,15 +137,55 @@ body {
     width: 100%;
 }
 
-.notes-grid{
-    border: none !important
+.notes-grid tr:nth-child(3n) {
+    border: none !important;
+}
+
+.notes-grid tr td:nth-child(3n) {
+    border: none !important;
+}
+
+.notes-grid tr:first-child {
+    border: none !important;
+}
+
+.notes-grid td:first-child {
+    border: none !important;
 }
 
 .inner-cell{
+    border: none !important;
     width: 10%;
     height: 10%;
     text-align: center;
     font-size: 8px;
     caret-color: transparent;
-    color: transparent;
+    color: white;
+}
+
+.inner-cell::selection {
+    background-color: transparent; 
+}
+
+.show-notes{
+    color: #ffffff;
+}
+.active{
+    background-color: #4e4d4d;
+    cursor: pointer;
+}
+
+.annotation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+}
+
+.annotation-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    font-size: 0.8em;
 }

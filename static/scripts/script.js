@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    var annotationMode = false;
     //Salva a dificuldade no local storage
     var savedDifficulty = localStorage.getItem('dificulty');
     //Verifica se existe uma dificuldade salva
@@ -32,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var primaryCellNumber = parseInt(this.textContent);
             cells.forEach(function(cell) {
                 var cellNumber = parseInt(cell.textContent);
-                
-                if (cellNumber === primaryCellNumber && !cell.classList.contains('primary-cell')) {
+                if (cellNumber === primaryCellNumber && !cell.classList.contains('primary-cell') && primaryCellNumber !== 0) {
                     cell.classList.add('selected-cell');
                 }
             });
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function isSudokuComplete() {
         var isComplete = true;
         cells.forEach(function(cell) {
-            if (cell.textContent === " ") {
+            if (cell.textContent.trim() === ''){
                 isComplete = false;
             }
         });
@@ -255,11 +255,30 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.btn-hint').addEventListener('click', function() {
         hint();
     });
+    document.querySelector('.btn-notes').addEventListener('click', function() {
+        notes();
+    });
     
     function addNumberToCell(number) {
         var selectedCell = document.querySelector('.primary-cell');
         if (selectedCell && !selectedCell.classList.contains('default-cell')) {
-            selectedCell.textContent = number;
+            if (annotationMode) {
+                // Adicionar número à grade de anotações
+                var annotationGrid = selectedCell.querySelector('.annotation-grid');
+                if (!annotationGrid) {
+                    // Criar a grade de anotações se ainda não existir
+                    annotationGrid = document.createElement('div');
+                    annotationGrid.classList.add('annotation-grid');
+                    selectedCell.appendChild(annotationGrid);
+                }
+                var annotationCell = document.createElement('div');
+                annotationCell.classList.add('annotation-cell');
+                annotationCell.textContent = number;
+                annotationGrid.appendChild(annotationCell);
+            } else {
+                // Adicionar número à célula principal
+                selectedCell.textContent = number;
+            }
             handleCellConflict(selectedCell);
         }
     }
@@ -282,7 +301,11 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedCell.textContent = fullGridData[selectedCellRowIndex][selectedCellColIndex];
             handleCellConflict(selectedCell);
         }
-        console.log(fullGridData);
+    }
+    
+    function notes(){
+        annotationMode = !annotationMode;
+        console.log('Modo de anotação:', annotationMode);
     }
 
 // funcao do contador ( cronometro )

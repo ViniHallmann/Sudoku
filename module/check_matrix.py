@@ -34,7 +34,7 @@ class CheckMatrix:
             for row in range(start_row, start_row + self.box_size):
                 for col in range(start_col, start_col + self.box_size):
                     num = grid[row][col]
-                    if num in nums or num < 1 or num > 9:
+                    if num is not None and (num in nums or num < 1 or num > 9):
                         return False
                     nums.add(num)
             return True

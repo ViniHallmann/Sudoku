@@ -56,18 +56,7 @@
                     <tr>
                         {% for cell in row %}
                             {%if cell == " " %}
-                            <td class="sudoku-cell empty-cell" contenteditable="true">
-                                {{ cell }}
-                                <table class="notes-grid">
-                                    {% for i in range(3) %}
-                                        <tr>
-                                            {% for j in range(3) %}
-                                                <td class="inner-cell">{{i + j}}</td>
-                                            {% endfor %}
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            </td>
+                                <td class="sudoku-cell empty-cell" contenteditable="true"> {{ cell }}</td>
                             {% else %}
                                 <td class="sudoku-cell default-cell">{{ cell }}</td>
                             {% endif %}
@@ -79,7 +68,7 @@
             <div class="btn-utilitary">
                 <button class="btn btn-lg btn-remove" onclick="removeNumberFromCell()">Apagar</button>
                 <button class="btn btn-lg btn-hint" onclick="hint()">Dica</button>
-                <button class="btn btn-lg" onclick="c()">Anotar</button>
+                <button class="btn btn-lg btn-notes" onclick="notes()">Anotar</button>
             </div>
             <div class="btn-numbers-container">
                 {% for i in range(1, 10) %}
