@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var annotationMode = false;
     //Salva a dificuldade no local storage
     var savedDifficulty = localStorage.getItem('dificulty');
     //Verifica se existe uma dificuldade salva
@@ -29,14 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             //Seleciona a celula para ser a primary (cor verde)
             this.classList.add('primary-cell');
-            //Procura por celulas que possuem o mesmo valor da celula selecionada e adiciona a classe selected-cell
-            var primaryCellNumber = parseInt(this.textContent);
-            cells.forEach(function(cell) {
-                var cellNumber = parseInt(cell.textContent);
-                if (cellNumber === primaryCellNumber && !cell.classList.contains('primary-cell') && primaryCellNumber !== 0) {
-                    cell.classList.add('selected-cell');
-                }
-            });
+
             //Seleciona a linha e adiciona a classe selected-cell
             var cellsInRow = Array.from(this.parentNode.children);
             cellsInRow.forEach(function(rowCell) {
@@ -84,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.classList.add('selected-cell');
                 }
             });
-            
             isSudokuComplete();
         });
 
@@ -103,9 +94,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 handleCellConflict(this);
             }
-            if ( event.key === 'Backspace' || event.key === 'Delete'){
-                this.textContent = '';
-                handleCellConflict(this);
+            if ( event.key === 'Backspace' || event.key === 'Delete'){ // se usar backspace ou del 
+                this.textContent = '';  // zera a cell 
+                handleCellConflict(this); // verifica conflitos 
             }
         });
         
@@ -126,15 +117,17 @@ document.addEventListener('DOMContentLoaded', function() {
         resetToWhiteColor(cell);
         verifyCell(cell);
     }
-    function isSudokuComplete() {
+
+    function isSudokuComplete() { // funcao que testa se o sudoku esta completo 
         var isComplete = true;
         cells.forEach(function(cell) {
-            if (cell.textContent.trim() === ''){
+            if (cell.textContent === " ") { // se achar alguma vazia n esta
                 isComplete = false;
             }
         });
         if (isComplete){
-            verifySolution();
+            verifySolution(); // verifica se eh uma solucao valida
+            // existe mais de uma solucao possivel
         }
         return isComplete;
     }
@@ -255,31 +248,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.btn-hint').addEventListener('click', function() {
         hint();
     });
-    document.querySelector('.btn-notes').addEventListener('click', function() {
-        notes();
-    });
+
+    
     
     function addNumberToCell(number) {
         var selectedCell = document.querySelector('.primary-cell');
-        if (selectedCell && !selectedCell.classList.contains('default-cell')) {
-            if (annotationMode) {
-                // Adicionar número à grade de anotações
-                var annotationGrid = selectedCell.querySelector('.annotation-grid');
-                if (!annotationGrid) {
-                    // Criar a grade de anotações se ainda não existir
-                    annotationGrid = document.createElement('div');
-                    annotationGrid.classList.add('annotation-grid');
-                    selectedCell.appendChild(annotationGrid);
-                }
-                var annotationCell = document.createElement('div');
-                annotationCell.classList.add('annotation-cell');
-                annotationCell.textContent = number;
-                annotationGrid.appendChild(annotationCell);
-            } else {
-                // Adicionar número à célula principal
-                selectedCell.textContent = number;
-            }
-            handleCellConflict(selectedCell);
+        if (selectedCell && !selectedCell.classList.contains('default-cell')) {  // se a celula nao for default
+            selectedCell.textContent = number; // entao a celula recebe o numero
+            handleCellConflict(selectedCell);  // verifica conflitos 
         }
     }
 
@@ -301,34 +277,52 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedCell.textContent = fullGridData[selectedCellRowIndex][selectedCellColIndex];
             handleCellConflict(selectedCell);
         }
-    }
-    
-    function notes(){
-        annotationMode = !annotationMode;
-        console.log('Modo de anotação:', annotationMode);
+        console.log(fullGridData);
     }
 
 // funcao do contador ( cronometro )
 var timer;
-var ele = document.getElementById('timer');
+var ele = document.getElementById('timer'); // var usada no startTimer pra formatar
+var sec = 0;
+var min = 0; 
 
-(function (){
-  var sec = 0;
-  var min = 0;
-  timer = setInterval(()=>{
-    if(sec == 60)
-    min++;
-    if(sec < 10)
-    ele.innerHTML = '0'+min+':0'+sec;
-    else
-        ele.innerHTML = '00:'+sec;
-    sec ++;
-  }, 1000) // each 1 second
-})() 
+function startTimer() {
+  timer = setInterval(() => {
+    if (sec == 60) {
+      min++;
+      sec = 0; // reinicia os segundos quando chegar a 60
+    }
+    var formattedSec = sec < 10 ? '0' + sec : sec;
+    var formattedMin = min < 10 ? '0' + min : min;
+    ele.innerHTML = formattedMin + ':' + formattedSec;
+    sec++;
+  }, 1000); // a cada 1 segundo
+}
 
-function pause(){
+function pause() { // pausa o timer 
   clearInterval(timer);
 }
+
+// Pausa o timer quando a janela perde o foco
+window.onblur = function() {
+  pause();
+};
+
+// Retoma o timer quando a janela recupera o foco
+window.onfocus = function() {
+if (window.location.pathname === '/processar')
+    startTimer();
+};
+
+
+// Inicia o timer somente se estiver no endereço que possui algum jogo
+// nao inicia na pag inicial 
+
+if (window.location.pathname === '/processar') {
+    // Execute sua função aqui
+    startTimer();
+}
+//startTimer();
 
 });
 
