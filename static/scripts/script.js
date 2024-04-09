@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    var annotationMode = false;
     //Salva a dificuldade no local storage
     var savedDifficulty = localStorage.getItem('dificulty');
     //Verifica se existe uma dificuldade salva
@@ -192,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } 
     }
+    
     function isValidColumn(cell){
         var column = cell.parentNode;
         var colIndex = Array.from(column.children).indexOf(cell);
@@ -211,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
+
     function isValidSquare(cell){
         var rowIndex = Array.from(cell.parentNode.parentNode.children).indexOf(cell.parentNode);
         var colIndex = Array.from(cell.parentNode.children).indexOf(cell);
@@ -249,14 +252,37 @@ document.addEventListener('DOMContentLoaded', function() {
         hint();
     });
 
-    
+    document.querySelector('.btn-notes').addEventListener('click', function() {
+        notes();
+    });
     
     function addNumberToCell(number) {
         var selectedCell = document.querySelector('.primary-cell');
         if (selectedCell && !selectedCell.classList.contains('default-cell')) {  // se a celula nao for default
-            selectedCell.textContent = number; // entao a celula recebe o numero
+            if (annotationMode) {
+                // Adicionar número à grade de anotações
+                var annotationGrid = selectedCell.querySelector('.annotation-grid');
+                if (!annotationGrid) {
+                    // Criar a grade de anotações se ainda não existir
+                    annotationGrid = document.createElement('div');
+                    annotationGrid.classList.add('annotation-grid');
+                    selectedCell.appendChild(annotationGrid);
+                }
+                var annotationCell = document.createElement('div');
+                annotationCell.classList.add('annotation-cell');
+                annotationCell.textContent = number;
+                annotationGrid.appendChild(annotationCell);
+            } else {
+                // Adicionar número à célula principal
+                selectedCell.textContent = number;
+            }
             handleCellConflict(selectedCell);  // verifica conflitos 
         }
+    }
+
+    function notes(){
+        annotationMode = !annotationMode;
+        console.log('Modo de anotação:', annotationMode);
     }
 
     function removeNumberFromCell() {
